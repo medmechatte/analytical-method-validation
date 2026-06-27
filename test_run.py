@@ -12,3 +12,14 @@ validator.linearity()
 
 # Tester LOD et LOQ
 validator.lod_loq()
+
+# Tester Accuracy
+theoretical = [0.5, 1.0, 2.0, 5.0, 10.0]
+measured    = [0.498, 1.008, 1.995, 5.023, 9.987]
+
+validator.accuracy(theoretical, measured)
+
+# Tester Precision
+replicates = [15230, 15180, 15260, 15210, 15240, 15220]
+
+validator.precision(replicates)

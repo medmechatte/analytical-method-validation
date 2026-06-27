@@ -64,3 +64,58 @@ class MethodValidator:
         print(f"LOQ : {loq:.4f} µg/mL")
 
         return lod, loq
+
+    def accuracy(self, theoretical, measured):
+        """
+        Calculate recovery rate (%) at each concentration level.
+
+        Parameters
+        ----------
+        theoretical : list — theoretical concentrations
+        measured    : list — experimentally measured concentrations
+        """
+        theoretical = np.array(theoretical)
+        measured = np.array(measured)
+
+        recovery = (measured / theoretical) * 100
+        mean_recovery = np.mean(recovery)
+
+        print("\n=== ACCURACY (Recovery) ===")
+        for i in range(len(theoretical)):
+            status = "✅" if 98 <= recovery[i] <= 102 else "❌"
+            print(f"Level {i + 1}: {recovery[i]:.2f}% {status}")
+
+        print(f"Mean Recovery : {mean_recovery:.2f}%")
+
+        if 98 <= mean_recovery <= 102:
+            print("Status        : ✅ PASS (98–102%)")
+        else:
+            print("Status        : ❌ FAIL")
+
+        return recovery, mean_recovery
+
+    def precision(self, replicates):
+        """
+        Calculate repeatability (RSD%) from replicate measurements.
+
+        Parameters
+        ----------
+        replicates : list — repeated measurements at same concentration
+        """
+        replicates = np.array(replicates)
+
+        mean = np.mean(replicates)
+        std = np.std(replicates, ddof=1)
+        rsd = (std / mean) * 100
+
+        print("\n=== PRECISION (Repeatability) ===")
+        print(f"Mean : {mean:.4f}")
+        print(f"SD   : {std:.4f}")
+        print(f"RSD  : {rsd:.2f}%")
+
+        if rsd <= 2.0:
+            print("Status : ✅ PASS (RSD ≤ 2%)")
+        else:
+            print("Status : ❌ FAIL (RSD > 2%)")
+
+        return mean, std, rsd
