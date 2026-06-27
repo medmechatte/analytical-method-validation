@@ -23,3 +23,14 @@ validator.accuracy(theoretical, measured)
 replicates = [15230, 15180, 15260, 15210, 15240, 15220]
 
 validator.precision(replicates)
+from src.plots import plot_calibration_curve, plot_recovery
+
+# Graphique calibration
+slope, intercept, r_squared = validator.linearity()
+plot_calibration_curve(concentrations, responses, slope, intercept, r_squared)
+
+# Graphique recovery
+theoretical = [0.5, 1.0, 2.0, 5.0, 10.0]
+measured    = [0.498, 1.008, 1.995, 5.023, 9.987]
+recovery, mean_recovery = validator.accuracy(theoretical, measured)
+plot_recovery(theoretical, recovery)
